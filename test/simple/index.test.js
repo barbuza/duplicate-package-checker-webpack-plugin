@@ -21,4 +21,13 @@ describe('Simple dependency tree', function() {
       done();
     });
   });
+
+  it('should ignore', function(done) {
+    let warning = "duplicate-package-checker:\n  <a>\n    1.0.0 ./~/a from ./entry.js\n    2.0.0 ./~/b/~/a from ./~/b/index.js\n";
+
+    webpack(MakeConfig({ verbose: true, ignore: ['b'] }), function(err, stats) {
+      assert.equal(stripAnsi(stats.compilation.warnings[0].message), warning);
+      done();
+    });
+  });
 });
